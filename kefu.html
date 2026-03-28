@@ -4,10 +4,150 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>客服</title>
+  <title>智能客服中心 - 售后与技术支持</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 自定义一些平滑动画 */
+    .hover-lift {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+  </style>
 </head>
 
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans min-h-screen flex flex-col relative pb-20">
+
+  <!-- 导航栏 -->
+  <nav class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex items-center space-x-3">
+          <!-- 蓝色圆形包裹图标 -->
+          <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z">
+              </path>
+            </svg>
+          </div>
+          <span class="font-bold text-xl text-blue-600">通信服务支持</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 头部 Banner -->
+  <!-- 左蓝右紫渐变，右侧添加点阵背景装饰 -->
+  <header class="bg-gradient-to-r from-blue-500 to-indigo-600 text-white overflow-hidden relative">
+    <!-- 右侧点阵装饰 (模仿参考图) -->
+    <div class="absolute inset-y-0 right-0 w-1/2 opacity-20 pointer-events-none"
+      style="background-image: radial-gradient(circle, white 2px, transparent 2px); background-size: 24px 24px; background-position: right center;">
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 py-20 sm:px-6 lg:px-8 text-left flex flex-col relative z-10">
+      <div class="md:w-3/5 space-y-6">
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight">智能客服中心</h1>
+        <p class="text-base md:text-lg text-blue-50 leading-relaxed font-light">
+          7x24小时全天候在线咨询。无论是卡片激活、网络排障，还是流量充值、<br class="hidden md:block" />
+          退换货问题，智能助手随时为您服务。
+        </p>
+        <div class="pt-4">
+          <!-- 胶囊形按钮提示 -->
+          <p
+            class="inline-flex items-center px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-sm font-medium backdrop-blur-sm cursor-pointer hover:bg-white/20 transition">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            点击下方卡片内容，立即开始咨询
+          </p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 核心服务区 (Grid) -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8 w-full relative z-10 bg-gray-50">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- 服务卡片 1：退换货 -->
+      <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover-lift cursor-pointer">
+        <div class="mb-5 text-blue-500">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z">
+            </path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">退换货服务</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          丢卡、无信号/质量问题等，支持退换货及售后申请，提供邮寄地址信息。
+        </p>
+      </div>
+
+      <!-- 服务卡片 2：网络连接 -->
+      <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover-lift cursor-pointer">
+        <div class="mb-5 text-green-500">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0">
+            </path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">网络连接排障</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          无信号、网络慢、无法连接等问题，提供配置指南，以及 APN 配置说明。
+        </p>
+      </div>
+
+      <!-- 服务卡片 3：卡片激活 -->
+      <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover-lift cursor-pointer">
+        <div class="mb-5 text-purple-500">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2">
+            </path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">卡片激活</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          新卡首次认证、激活失败排查，ICCID 查询步骤，以及蜂窝网络/数据开通指引。
+        </p>
+      </div>
+
+      <!-- 服务卡片 4：充值流量 -->
+      <div class="bg-white rounded-xl p-8 shadow-sm border border-gray-100 hover-lift cursor-pointer">
+        <div class="mb-5 text-orange-500">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+        </div>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">充值与流量</h3>
+        <p class="text-gray-500 text-sm leading-relaxed">
+          套餐与余量查询、充值异常处理，支持流量包购买，资费调整咨询。
+        </p>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- 底部版权 -->
+  <footer class="bg-white border-t border-gray-100 py-8 mt-auto">
+    <div
+      class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
+      <p>&copy; 2024 通信服务支持中心. All rights reserved.</p>
+      <div class="mt-4 md:mt-0 flex space-x-6">
+        <a href="#" class="hover:text-gray-600 transition">隐私政策</a>
+        <a href="#" class="hover:text-gray-600 transition">服务条款</a>
+      </div>
+    </div>
+  </footer>
+
 
   <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
   <script>
