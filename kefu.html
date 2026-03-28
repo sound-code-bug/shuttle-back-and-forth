@@ -1,32 +1,168 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>客服</title>
 </head>
 
 <body>
 
   <script src="https://lf-cdn.coze.cn/obj/unpkg/flow-platform/chat-app-sdk/1.2.0-beta.19/libs/cn/index.js"></script>
   <script>
-    new CozeWebSDK.WebChatClient({
-      config: {
-        bot_id: '7618133831199735871',
-      },
-      componentProps: {
-        title: 'Coze',
-      },
-      auth: {
-        type: 'token',
-        token: 'pat_uySch7eO7JwtMrQGO8jE48t2d4HkdwMR9fSImpWjWceg9eh5PZrwQkWYVEOWCHe2',
-        onRefreshToken: function () {
-          return 'pat_uySch7eO7JwtMrQGO8jE48t2d4HkdwMR9fSImpWjWceg9eh5PZrwQkWYVEOWCHe2'
+    (function () {
+
+      // =============================================
+      // ① 填写你的配置（从扣子平台获取）
+      // =============================================
+      const COZE_CONFIG = {
+        botId: '7618133831199735871',      // 你的智能体 ID（不变）
+        appId: '1157358362327',     // 扣子 OAuth 应用 ID
+        kid: 'AoZ_8PpF988kM1ScL7uCiOGOIZmo416sMOSIC_cNTxQ',         // 扣子平台上显示的公钥 kid
+        privateKey: `
+        -----BEGIN PRIVATE KEY-----
+          MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCdoayRO7wOODkR
+          IXlCNPHYGFmFANvCar3DoduzO9W5fHHojM9bPRatRyXvuynmY/53XU4tzTB++UUL
+          j4m66fIsY0jNzaLD0d23NMo2SbDbAsr2tEWGYT7J9uQPDB+0F5M017HlAR7bTU3S
+          Ni6bcWv8lrGojA8kXPyxUlz7bjyg8sRCqI4vn6fhBM3SdEYdkrP6QWvWnZit4q2r
+          cZ0XVgD/7keGf8X/i61y1nqvQ9X+vu0w/to0k6QJjgcqBbPYFYiJ9+lXYCT++YoP
+          ya28Qgp32NCehFx8y4hFa9TYA717DZqZ1cVcGcii/i/RSj+q/HZMJn8sIpJeAa/B
+          Mg/Lf+BlAgMBAAECggEACyWkOO8C+PRz4Ki/1PU+hvwN1JB/eeuneL6o9S9NiVzq
+          Bzpx7W9P+7f00FOpfl/i3lkMTsPcYpZJEiy33i5uEEKDIv6gPH3KUorao+UpKwuz
+          A6gy5HJbCNg7P28pjMhAAjQgoeOm5XY9gxiOyjJGoyma7aLd7UHgIsAC0Er24aC8
+          4UyBgoQcAl97iaLF9xliTqJod8cHM143XtYI+PqvICnqyEQdb3GnnL7MY68C0NcC
+          NleiUOpCtbdN4vvXVI/Im7+ucCeWc+JaKA9RiH8jcobcPNXrd+Vj0TGkWM60hdMZ
+          8wifD9fZVEcjjY59a8HFLw9b1JKM+eowInRXPgJn0QKBgQDOV/G24jibUrrr9Qv0
+          kwnOv7QJ3I0lABnbtg4UlHESksobTzYtDmCf0sKT1qHUqWjGFo0F+J95hWJpDrDj
+          0I8P9T5C+gp24A2RbnqMjUtTqvf9pUzoC/EN/GrXr6r5Asvsjkh3zBvav17fVt8/
+          kqa5igL3iXdLb6ESZoqfBRAtWQKBgQDDkMP/irzVA9znIjBphX0iirDI2N3T2o8x
+          oK/MurQYY0586I0yji1JiUwLKodMN29WnbnZukdR3+Rh9uOrBn9AyfVhGvcGK+nX
+          oV2f2qlGDPb8zi13tcVBKiDNvRl5ZlpF8R3iBCmAnyEMxfslFz9JUg8K6X2Xt+5v
+          ansoEA9t7QKBgAqQL/yXyiQRcSZBLjKAEIF4COR0WPlq7ufzgvcEvmEgCJ6rSG+4
+          C7RC2tkspK45WfbCEsgaeTeEX4xXRzDybVB40o4lNMHvKGKokDd/yDppRzbB7pT2
+          f4miwWl3Qb5rqTrb8dPILCjfoSC31sfvXv+ilBJOBEBlX46Ml04auUBJAoGAARMC
+          gJzafLEQvZRKf8nj7hSk8/V9AnTo5HTlglJkOt4QyE7et7BgP08pw8XwCFMloWws
+          YS3Mxn5cWs1oYsAeYtS5LFdhk/8Zwb15Li+dTm0zzh+z0DyHYNxCYd7wDOKrDEdO
+          yrcLI1G8dL2Bq6p9BoIU4xJ1RigUfzguhQHRk+ECgYEAwYlx1m38w3Isui7FoybC
+          clGjBwo9Ib/m3Kwz0V6VB5/SQguXzEigy862uV1vXj9JY8OjDIbx0mBXdcV4q+Vh
+          KWSF1OszuH/mxpREWFV8qsQwbqmM919QBDGjr+V6rswCndeiBoTwx7bQxY9KxbFN
+          gb/jwu3oehslONiIX/F8h7w=
+        -----END PRIVATE KEY-----
+        `
+      };
+
+      // =============================================
+      // ② 获取/生成本浏览器唯一 userId（会话隔离关键）
+      // =============================================
+      function getSessionName() {
+        const KEY = 'coze_session_name';
+        let name = localStorage.getItem(KEY);
+        if (!name) {
+          name = 'sess_' + Math.random().toString(36).slice(2) + '_' + Date.now();
+          localStorage.setItem(KEY, name);
+        }
+        return name;
+      }
+
+      // =============================================
+      // ③ 动态加载 jsrsasign 库（浏览器端签 JWT）
+      // =============================================
+      function loadJwtLib() {
+        return new Promise((resolve, reject) => {
+          if (window.KJUR?.jws?.JWS && window.KEYUTIL) { resolve(); return; }
+          const s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jsrsasign/8.0.20/jsrsasign-all-min.js';
+          s.crossOrigin = 'anonymous';
+          s.onload = () => window.KJUR?.jws?.JWS && window.KEYUTIL ? resolve() : reject(new Error('JWT库初始化失败'));
+          s.onerror = () => reject(new Error('JWT库加载失败'));
+          document.head.appendChild(s);
+        });
+      }
+
+      // =============================================
+      // ④ 用私钥签名 JWT（payload 含 session_name）
+      // =============================================
+      function signJwt(sessionName) {
+        const now = Math.floor(Date.now() / 1000);
+        const header = JSON.stringify({ alg: 'RS256', typ: 'JWT', kid: COZE_CONFIG.kid });
+        const payload = JSON.stringify({
+          iss: COZE_CONFIG.appId,
+          aud: 'api.coze.cn',
+          iat: now,
+          exp: now + 3600,                         // JWT 有效期 1 小时
+          jti: Math.random().toString(36).slice(2), // 防重放随机串
+          session_name: sessionName                 // ✅ 会话隔离的核心！
+        });
+        const privateKey = COZE_CONFIG.privateKey
+          .replace(/\r/g, '')
+          .split('\n')
+          .map(line => line.trim())
+          .filter(Boolean)
+          .join('\n');
+        const prvKey = KEYUTIL.getKey(privateKey);
+        return KJUR.jws.JWS.sign('RS256', header, payload, prvKey);
+      }
+
+      // =============================================
+      // ⑤ 用 JWT 换取 Coze AccessToken
+      // =============================================
+      async function getAccessToken(jwt) {
+        const res = await fetch('https://api.coze.cn/api/permission/oauth2/token', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + jwt
+          },
+          body: JSON.stringify({
+            duration_seconds: 86399,
+            grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer'
+          })
+        });
+        const data = await res.json();
+        if (!data.access_token) throw new Error('获取Token失败：' + JSON.stringify(data));
+        return data.access_token;
+      }
+
+      // =============================================
+      // ⑥ 初始化 Coze Chat SDK
+      // =============================================
+      async function init() {
+        try {
+          await loadJwtLib();
+          const sessionName = getSessionName();
+          console.log('[Coze] session_name:', sessionName); // 不同浏览器此值不同 ✅
+          const jwt = signJwt(sessionName);
+          const accessToken = await getAccessToken(jwt);
+
+          new CozeWebSDK.WebChatClient({
+            config: { bot_id: COZE_CONFIG.botId },
+            componentProps: { title: 'Coze' },
+            auth: {
+              type: 'token',
+              token: accessToken,
+              onRefreshToken: async () => {
+                // Token 过期时自动重新获取
+                const newJwt = signJwt(getSessionName());
+                return await getAccessToken(newJwt);
+              }
+            },
+            userInfo: {
+              id: sessionName,
+              nickname: '访客'
+            }
+          });
+
+        } catch (err) {
+          console.error('[Coze] 初始化失败：', err);
         }
       }
-    });
+
+      init();
+
+    })();
   </script>
+
 </body>
 
 </html>
