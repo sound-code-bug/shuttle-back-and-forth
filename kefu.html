@@ -64,14 +64,14 @@
         </p>
         <div class="pt-4">
           <!-- 胶囊形按钮提示 -->
-          <p
+          <button type="button" id="coze-open-chat"
             class="inline-flex items-center px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-sm font-medium backdrop-blur-sm cursor-pointer hover:bg-white/20 transition">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            点击下方卡片内容，立即开始咨询
-          </p>
+            开始提问
+          </button>
         </div>
       </div>
     </div>
@@ -187,6 +187,83 @@
         `
       };
 
+      let cozeClient = null;
+      let pendingOpenChat = false;
+
+      function tryOpenChatByClient(client) {
+        const candidates = [
+          { name: 'open', args: [] },
+          { name: 'show', args: [] },
+          { name: 'toggle', args: [] },
+          { name: 'openChat', args: [] },
+          { name: 'openWindow', args: [] },
+          { name: 'setOpen', args: [true] },
+          { name: 'setVisible', args: [true] },
+          { name: 'setShow', args: [true] }
+        ];
+
+        for (const c of candidates) {
+          const fn = client?.[c.name];
+          if (typeof fn === 'function') {
+            try {
+              fn.apply(client, c.args);
+              return true;
+            } catch (_) {
+            }
+          }
+        }
+        return false;
+      }
+
+      function tryOpenChatByDomClick() {
+        const fixedCandidates = Array.from(document.querySelectorAll('button,[role="button"],div'))
+          .filter(el => {
+            const style = window.getComputedStyle(el);
+            if (style.position !== 'fixed') return false;
+            if (style.right === 'auto' || style.bottom === 'auto') return false;
+            const z = Number.parseInt(style.zIndex || '0', 10);
+            return Number.isFinite(z) && z >= 999;
+          });
+
+        fixedCandidates.sort((a, b) => {
+          const sa = window.getComputedStyle(a);
+          const sb = window.getComputedStyle(b);
+          const za = Number.parseInt(sa.zIndex || '0', 10) || 0;
+          const zb = Number.parseInt(sb.zIndex || '0', 10) || 0;
+          return zb - za;
+        });
+
+        const launcher = fixedCandidates[0];
+        if (launcher && typeof launcher.click === 'function') {
+          launcher.click();
+          return true;
+        }
+        return false;
+      }
+
+      function openChat() {
+        pendingOpenChat = true;
+        if (tryOpenChatByClient(cozeClient)) return;
+        tryOpenChatByDomClick();
+      }
+
+      function bindOpenChatTrigger() {
+        const el = document.getElementById('coze-open-chat');
+        if (!el) return;
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          openChat();
+        });
+        el.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openChat();
+          }
+        });
+      }
+
+      bindOpenChatTrigger();
+
       // =============================================
       // ② 获取/生成本浏览器唯一 userId（会话隔离关键）
       // =============================================
@@ -270,7 +347,7 @@
           const jwt = signJwt(sessionName);
           const accessToken = await getAccessToken(jwt);
 
-          new CozeWebSDK.WebChatClient({
+          cozeClient = new CozeWebSDK.WebChatClient({
             config: { bot_id: COZE_CONFIG.botId },
             componentProps: { title: 'Coze' },
             auth: {
@@ -287,6 +364,8 @@
               nickname: '访客'
             }
           });
+
+          if (pendingOpenChat) openChat();
 
         } catch (err) {
           console.error('[Coze] 初始化失败：', err);
