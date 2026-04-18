@@ -206,7 +206,7 @@
 <script>
   $(function () {
     console.log(123);
-    
+
     const ua = navigator.userAgent || "";
     const isWeChat = /MicroMessenger/i.test(ua);
 
@@ -244,15 +244,12 @@
 
     } else {
       // 非微信环境
-      // 方式一：跳转
-      // window.location.href = "http://sjl.wlwbox.com/s/1433916nro";
-
       // 方式二：iframe 打开
       if ($("#iframeId").length > 0) {
-        $("#iframeId").attr("src", "http://sjl.wlwbox.com/s/1433916nro");
+        $("#iframeId").attr("src", "https://sjl.wlwbox.com/s/1433916nro");
       } else {
         // 如果没有 iframe，直接跳转
-        window.location.href = "http://sjl.wlwbox.com/s/1433916nro";
+        window.location.href = "https://sjl.wlwbox.com/s/1433916nro";
       }
     }
   });
