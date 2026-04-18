@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>在线客服</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  li {
+    list-style-type: none;
+  }
+
+  body {
+    width: 100%;
+    background-color: #f6f6f6;
+  }
+
+  main {
+    width: 95%;
+    max-width: 1000px;
+    margin: 65px auto;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  iframe {
+    margin: 55px auto;
+    height: calc(100vh - 55px);
+  }
+
+  header {
+    width: 100%;
+    height: 55px;
+    background-color: #fff;
+    border-bottom: 1px #e0e0e0 solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
+
+  header p {
+    font-size: 17px;
+    color: #333;
+  }
+
+  header .leftIcon {
+    position: absolute;
+    left: 5px;
+    cursor: pointer;
+    transform: rotate(180deg);
+  }
+
+  header .leftIcon img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .list {
+    background-color: #fff;
+  }
+
+  .list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    cursor: pointer;
+  }
+
+  .list li .icon {
+    width: 24px;
+  }
+
+  .list li .icon img {
+    width: 100%;
+  }
+
+  .list li div {
+    color: #333;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+  }
+
+  .list li div p {
+    margin-left: 18px;
+  }
+
+  .list li .arr {
+    width: 24px;
+    padding: 0 10px;
+    box-sizing: content-box;
+  }
+
+  .list li .arr img {
+    width: 100%;
+  }
+
+  .kefuBox {
+    width: 100%;
+    height: 75px;
+    background-color: #fff;
+    border-top: 1px #e0e0e0 solid;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .kefuBox .btn {
+    width: 95%;
+    height: 50px;
+    max-width: 1000px;
+    border-radius: 30px;
+    background-color: #1192FE;
+    color: #fff;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #wechat-open-browser-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 9999;
+    display: none;
+  }
+
+  #wechat-open-browser-mask.show {
+    display: block;
+  }
+
+  #wechat-open-browser-mask .wechat-open-browser-content {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    max-width: min(360px, calc(100vw - 24px));
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 14px 14px 12px;
+    color: #111;
+  }
+
+  #wechat-open-browser-mask .wechat-open-browser-title {
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 22px;
+  }
+
+  #wechat-open-browser-mask .wechat-open-browser-desc {
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 20px;
+    color: #333;
+  }
+
+  #wechat-open-browser-mask .wechat-open-browser-tip {
+    margin-top: 10px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #666;
+  }
+
+  #wechat-open-browser-mask .wechat-open-browser-action {
+    margin-top: 12px;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    background-color: #1192FE;
+    color: #fff;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+  }
+</style>
+
+<body>
+  <header id="head">
+    <div class="leftIcon" id="kfBack">
+      <img src="./assets/images/arrowsRighe.png" alt="">
+    </div>
+    <p>在线客服</p>
+  </header>
+
+  <iframe id="iframeId" src="" width="100%" height="100%" frameborder="0"></iframe>
+</body>
+
+<script src="./js/jquery-3.7.1.min.js"></script>
+<script src="./assets/js/common.js"></script>
+
+<script>
+  $(function () {
+    const ua = navigator.userAgent || "";
+    const isWeChat = /MicroMessenger/i.test(ua);
+
+    const maskId = "wechat-open-browser-mask";
+
+    if (isWeChat) {
+      // 防止重复创建
+      if ($("#" + maskId).length === 0) {
+        const maskHtml = `
+        <div id="${maskId}" class="wechat-open-browser-mask show">
+          <div class="wechat-open-browser-content" role="dialog" aria-modal="true">
+            <div class="wechat-open-browser-title">请在浏览器打开</div>
+            <div class="wechat-open-browser-desc">
+              当前在微信内打开，部分功能可能受限。
+            </div>
+            <div class="wechat-open-browser-tip">
+              点击右上角 ···，选择“在浏览器打开”
+            </div>
+            <button class="wechat-open-browser-close" data-action="dismiss">
+              我知道了
+            </button>
+          </div>
+        </div>
+      `;
+
+        $("body").append(maskHtml);
+      } else {
+        $("#" + maskId).addClass("show");
+      }
+
+      // 点击关闭
+      $(document).on("click", "[data-action='dismiss']", function () {
+        $("#" + maskId).removeClass("show");
+      });
+
+    } else {
+      // 非微信环境
+      // 方式一：跳转
+      // window.location.href = "http://sjl.wlwbox.com/s/1433916nro";
+
+      // 方式二：iframe 打开
+      if ($("#iframeId").length > 0) {
+        $("#iframeId").attr("src", "http://sjl.wlwbox.com/s/1433916nro");
+      } else {
+        // 如果没有 iframe，直接跳转
+        window.location.href = "http://sjl.wlwbox.com/s/1433916nro";
+      }
+    }
+  });
+
+</script>
+
+</html>
